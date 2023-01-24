@@ -1,0 +1,15 @@
+['conv1', 'bn1', 'relu', 'maxpool', 'layer1', 'layer2', 'layer3', 'layer4', 'avgpool', 'fc']
+******** Training ********
+1  train Loss: 0.8372 Acc: 0.7668
+******** Training ********
+1  train Loss: 0.7408 Acc: 0.6939
+
+98it [00:02, 40.52it/s]
+
+
+
+
+
+
+
+596it [00:12, 46.21it/s]

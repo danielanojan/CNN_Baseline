@@ -1,0 +1,42 @@
+Downloading: "https://download.pytorch.org/models/vgg16-397923af.pth" to /home/daniel/.cache/torch/hub/checkpoints/vgg16-397923af.pth
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+100%|██████████| 528M/528M [00:47<00:00, 11.5MB/s]
+Traceback (most recent call last):
+  File "/home/daniel/anaconda/envs/siamese/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3343, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-2-0e8e283efe59>", line 1, in <module>
+    runfile('/home/daniel/simase_network/CNN_baseline/train.py', wdir='/home/daniel/simase_network/CNN_baseline/')
+  File "/home/daniel/.pycharm_helpers/pydev/_pydev_bundle/pydev_umd.py", line 198, in runfile
+    pydev_imports.execfile(filename, global_vars, local_vars)  # execute the script
+  File "/home/daniel/.pycharm_helpers/pydev/_pydev_imps/_pydev_execfile.py", line 18, in execfile
+    exec(compile(contents+"\n", file, 'exec'), glob, loc)
+  File "/home/daniel/simase_network/CNN_baseline/train.py", line 357, in <module>
+    main()
+  File "/home/daniel/simase_network/CNN_baseline/train.py", line 93, in main
+    model = get_model(args, device)
+  File "/home/daniel/simase_network/CNN_baseline/model/net.py", line 31, in get_model
+    num_ftrs = model.fc.in_features
+  File "/home/daniel/anaconda/envs/siamese/lib/python3.6/site-packages/torch/nn/modules/module.py", line 1178, in __getattr__
+    type(self).__name__, name))

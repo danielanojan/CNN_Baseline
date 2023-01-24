@@ -1,0 +1,18 @@
+{
+    "os": "Linux-5.15.0-53-generic-x86_64-with-debian-bookworm-sid",
+    "python": "3.6.13",
+    "heartbeatAt": "2023-01-13T13:57:38.810501",
+    "startedAt": "2023-01-13T13:57:38.223051",
+    "docker": null,
+    "gpu": "NVIDIA GeForce GTX 1080 Ti",
+    "gpu_count": 4,
+    "cpu_count": 72,
+    "cuda": null,
+    "args": null,
+    "state": "running",
+    "program": "/home/daniel/simase_network/CNN_baseline/train.py",
+    "codePath": "train.py",
+    "host": "kipchoge",
+    "username": "daniel",
+    "executable": "/home/daniel/anaconda/envs/siamese/bin/python"
+}

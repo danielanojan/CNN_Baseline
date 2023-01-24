@@ -1,0 +1,30 @@
+2023-01-13 13:55:12,521 INFO    MainThread:3367113 [wandb_setup.py:_flush():68] Configure stats pid to 3367113
+2023-01-13 13:55:12,521 INFO    MainThread:3367113 [wandb_setup.py:_flush():68] Loading settings from /home/daniel/.config/wandb/settings
+2023-01-13 13:55:12,522 INFO    MainThread:3367113 [wandb_setup.py:_flush():68] Loading settings from /home/daniel/simase_network/CNN_baseline/wandb/settings
+2023-01-13 13:55:12,522 INFO    MainThread:3367113 [wandb_setup.py:_flush():68] Loading settings from environment variables: {'_require_service': 'True'}
+2023-01-13 13:55:12,522 INFO    MainThread:3367113 [wandb_setup.py:_flush():68] Inferring run settings from compute environment: {'program_relpath': 'train.py', 'program': '/home/daniel/simase_network/CNN_baseline/train.py'}
+2023-01-13 13:55:12,522 INFO    MainThread:3367113 [wandb_init.py:_log_setup():476] Logging user logs to /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_135512-2ttbhm4e/logs/debug.log
+2023-01-13 13:55:12,522 INFO    MainThread:3367113 [wandb_init.py:_log_setup():477] Logging internal logs to /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_135512-2ttbhm4e/logs/debug-internal.log
+2023-01-13 13:55:12,522 INFO    MainThread:3367113 [wandb_init.py:_jupyter_setup():426] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x7f785ef3b278>
+2023-01-13 13:55:12,524 INFO    MainThread:3367113 [wandb_init.py:init():516] calling init triggers
+2023-01-13 13:55:12,524 INFO    MainThread:3367113 [wandb_init.py:init():520] wandb.init called with sweep_config: {}
+config: {'learning_rate': 0.0001, 'architecture': 'RESNET', 'dataset': '596_img_cleftlip', 'epochs': 20}
+2023-01-13 13:55:12,524 INFO    MainThread:3367113 [wandb_init.py:init():569] starting backend
+2023-01-13 13:55:12,524 INFO    MainThread:3367113 [wandb_init.py:init():573] setting up manager
+2023-01-13 13:55:12,533 INFO    MainThread:3367113 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2023-01-13 13:55:12,535 INFO    MainThread:3367113 [wandb_init.py:init():580] backend started and connected
+2023-01-13 13:55:12,558 INFO    MainThread:3367113 [wandb_run.py:_label_probe_notebook():1098] probe notebook
+2023-01-13 13:55:12,559 INFO    MainThread:3367113 [wandb_run.py:_label_probe_notebook():1108] Unable to probe notebook: 'NoneType' object has no attribute 'get'
+2023-01-13 13:55:12,559 INFO    MainThread:3367113 [wandb_init.py:init():658] updated telemetry
+2023-01-13 13:55:12,560 INFO    MainThread:3367113 [wandb_init.py:init():693] communicating run to backend with 30 second timeout
+2023-01-13 13:55:12,867 INFO    MainThread:3367113 [wandb_run.py:_on_init():1974] communicating current version
+2023-01-13 13:55:12,929 INFO    MainThread:3367113 [wandb_run.py:_on_init():1978] got version response upgrade_message: "wandb version 0.13.9 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2023-01-13 13:55:12,929 INFO    MainThread:3367113 [wandb_init.py:init():727] starting run threads in backend
+2023-01-13 13:55:17,967 INFO    MainThread:3367113 [wandb_run.py:_console_start():1954] atexit reg
+2023-01-13 13:55:17,967 INFO    MainThread:3367113 [wandb_run.py:_redirect():1812] redirect: SettingsConsole.WRAP_RAW
+2023-01-13 13:55:17,971 INFO    MainThread:3367113 [wandb_run.py:_redirect():1877] Wrapping output streams.
+2023-01-13 13:55:17,971 INFO    MainThread:3367113 [wandb_run.py:_redirect():1899] Redirects installed.
+2023-01-13 13:55:17,972 INFO    MainThread:3367113 [wandb_init.py:init():764] run started, returning control to user process
+2023-01-13 13:55:19,638 INFO    MainThread:3367113 [wandb_init.py:_pause_backend():389] pausing backend
+2023-01-13 13:55:19,638 INFO    MainThread:3367113 [jupyter.py:save_ipynb():378] not saving jupyter notebook

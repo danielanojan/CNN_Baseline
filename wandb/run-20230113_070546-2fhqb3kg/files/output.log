@@ -1,0 +1,45 @@
+['conv1', 'bn1', 'relu', 'maxpool', 'layer1', 'layer2', 'layer3', 'layer4', 'avgpool', 'fc']
+******** Training ********
+1  train Loss: 0.8372 Acc: 0.7668
+******** Training ********
+67it [00:01, 41.72it/s]
+
+98it [00:02, 40.21it/s]
+
+
+
+
+596it [00:13, 45.46it/s]
+******** Training ********
+1  train Loss: nan Acc: 0.7718
+******** Training ********
+35it [00:00, 46.90it/s]
+98it [00:02, 38.90it/s]
+Traceback (most recent call last):
+  File "/home/daniel/anaconda/envs/siamese/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3343, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-2-0e8e283efe59>", line 1, in <module>
+    runfile('/home/daniel/simase_network/CNN_baseline/train.py', wdir='/home/daniel/simase_network/CNN_baseline/')
+  File "/home/daniel/.pycharm_helpers/pydev/_pydev_bundle/pydev_umd.py", line 198, in runfile
+    pydev_imports.execfile(filename, global_vars, local_vars)  # execute the script
+  File "/home/daniel/.pycharm_helpers/pydev/_pydev_imps/_pydev_execfile.py", line 18, in execfile
+    exec(compile(contents+"\n", file, 'exec'), glob, loc)
+  File "/home/daniel/simase_network/CNN_baseline/train.py", line 359, in <module>
+    main()
+  File "/home/daniel/simase_network/CNN_baseline/train.py", line 136, in main
+    pca_plot(embeddings_train, labels_train, epoch, label=0000)
+  File "/home/daniel/simase_network/CNN_baseline/train.py", line 285, in pca_plot
+    principalcomponents = pca.fit_transform(embeddings)
+  File "/home/daniel/anaconda/envs/siamese/lib/python3.6/site-packages/sklearn/decomposition/_pca.py", line 383, in fit_transform
+    U, S, Vt = self._fit(X)
+  File "/home/daniel/anaconda/envs/siamese/lib/python3.6/site-packages/sklearn/decomposition/_pca.py", line 405, in _fit
+    ensure_2d=True, copy=self.copy)
+  File "/home/daniel/anaconda/envs/siamese/lib/python3.6/site-packages/sklearn/base.py", line 421, in _validate_data
+    X = check_array(X, **check_params)
+  File "/home/daniel/anaconda/envs/siamese/lib/python3.6/site-packages/sklearn/utils/validation.py", line 63, in inner_f
+    return f(*args, **kwargs)
+  File "/home/daniel/anaconda/envs/siamese/lib/python3.6/site-packages/sklearn/utils/validation.py", line 721, in check_array
+    allow_nan=force_all_finite == 'allow-nan')
+  File "/home/daniel/anaconda/envs/siamese/lib/python3.6/site-packages/sklearn/utils/validation.py", line 106, in _assert_all_finite
+    msg_dtype if msg_dtype is not None else X.dtype)
+ValueError: Input contains NaN, infinity or a value too large for dtype('float32').

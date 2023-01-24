@@ -1,0 +1,93 @@
+2023-01-13 07:00:28,990 INFO    StreamThr :2891549 [internal.py:wandb_internal():91] W&B internal server running at pid: 2891549, started at: 2023-01-13 07:00:28.988919
+2023-01-13 07:00:28,992 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: status
+2023-01-13 07:00:28,994 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: status
+2023-01-13 07:00:29,009 DEBUG   SenderThread:2891549 [sender.py:send():301] send: header
+2023-01-13 07:00:29,009 INFO    WriterThread:2891549 [datastore.py:open_for_write():75] open: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/run-90csv2is.wandb
+2023-01-13 07:00:29,010 DEBUG   SenderThread:2891549 [sender.py:send():301] send: run
+2023-01-13 07:00:29,319 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: check_version
+2023-01-13 07:00:29,327 INFO    SenderThread:2891549 [dir_watcher.py:__init__():216] watching files in: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files
+2023-01-13 07:00:29,329 INFO    SenderThread:2891549 [sender.py:_start_run_threads():915] run started: 90csv2is with start time 1673593228.98651
+2023-01-13 07:00:29,329 DEBUG   SenderThread:2891549 [sender.py:send():301] send: summary
+2023-01-13 07:00:29,330 INFO    SenderThread:2891549 [sender.py:_save_file():1155] saving file wandb-summary.json with policy end
+2023-01-13 07:00:29,331 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: check_version
+2023-01-13 07:00:29,397 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: run_start
+2023-01-13 07:00:29,418 DEBUG   HandlerThread:2891549 [meta.py:__init__():34] meta init
+2023-01-13 07:00:29,418 DEBUG   HandlerThread:2891549 [meta.py:__init__():49] meta init done
+2023-01-13 07:00:29,418 DEBUG   HandlerThread:2891549 [meta.py:probe():215] probe
+2023-01-13 07:00:29,425 DEBUG   HandlerThread:2891549 [git.py:repo():40] git repository is invalid
+2023-01-13 07:00:29,426 DEBUG   HandlerThread:2891549 [meta.py:_save_pip():53] save pip
+2023-01-13 07:00:29,427 DEBUG   HandlerThread:2891549 [meta.py:_save_pip():67] save pip done
+2023-01-13 07:00:29,427 DEBUG   HandlerThread:2891549 [meta.py:_save_conda():74] save conda
+2023-01-13 07:00:30,329 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_created():275] file/dir created: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/requirements.txt
+2023-01-13 07:00:30,330 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_created():275] file/dir created: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/conda-environment.yaml
+2023-01-13 07:00:30,330 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_created():275] file/dir created: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/wandb-summary.json
+2023-01-13 07:00:35,016 DEBUG   HandlerThread:2891549 [meta.py:_save_conda():84] save conda done
+2023-01-13 07:00:35,017 DEBUG   HandlerThread:2891549 [meta.py:probe():253] probe done
+2023-01-13 07:00:35,077 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:00:35,078 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:00:35,234 DEBUG   SenderThread:2891549 [sender.py:send():301] send: telemetry
+2023-01-13 07:00:35,237 DEBUG   SenderThread:2891549 [sender.py:send():301] send: files
+2023-01-13 07:00:35,237 INFO    SenderThread:2891549 [sender.py:_save_file():1155] saving file wandb-metadata.json with policy now
+2023-01-13 07:00:35,331 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/conda-environment.yaml
+2023-01-13 07:00:35,331 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_created():275] file/dir created: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/wandb-metadata.json
+2023-01-13 07:00:35,332 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_created():275] file/dir created: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:00:35,804 INFO    Thread-17 :2891549 [upload_job.py:push():139] Uploaded file /tmp/tmpsj26a8wpwandb/5hzrqjp8-wandb-metadata.json
+2023-01-13 07:00:37,332 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:00:50,237 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:00:50,238 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:01:00,347 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/config.yaml
+2023-01-13 07:01:00,574 DEBUG   SenderThread:2891549 [sender.py:send():301] send: stats
+2023-01-13 07:01:05,402 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:01:05,403 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:01:15,356 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:17,358 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:19,359 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:20,552 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:01:20,554 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:01:21,360 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:23,361 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:25,363 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:27,363 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:29,364 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:31,366 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:33,368 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:33,680 DEBUG   SenderThread:2891549 [sender.py:send():301] send: stats
+2023-01-13 07:01:35,368 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:35,715 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:01:35,715 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:01:37,352 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: partial_history
+2023-01-13 07:01:37,356 DEBUG   SenderThread:2891549 [sender.py:send():301] send: history
+2023-01-13 07:01:37,356 DEBUG   SenderThread:2891549 [sender.py:send():301] send: summary
+2023-01-13 07:01:37,362 INFO    SenderThread:2891549 [sender.py:_save_file():1155] saving file wandb-summary.json with policy end
+2023-01-13 07:01:37,369 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/wandb-summary.json
+2023-01-13 07:01:37,370 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:39,371 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:01:50,861 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:01:50,862 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:02:06,012 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:02:06,013 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:02:06,901 DEBUG   SenderThread:2891549 [sender.py:send():301] send: stats
+2023-01-13 07:02:16,393 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:02:19,395 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:02:20,311 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: pause
+2023-01-13 07:02:20,313 INFO    HandlerThread:2891549 [handler.py:handle_request_pause():696] stopping system metrics thread
+2023-01-13 07:02:20,396 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:02:20,549 DEBUG   SenderThread:2891549 [sender.py:send():301] send: stats
+2023-01-13 07:02:21,168 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:02:21,168 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:02:21,397 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:02:22,397 INFO    Thread-13 :2891549 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/daniel/simase_network/CNN_baseline/wandb/run-20230113_070028-90csv2is/files/output.log
+2023-01-13 07:02:36,317 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:02:36,318 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:02:51,465 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:02:51,466 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:03:06,613 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:03:06,613 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:03:21,762 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:03:21,763 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:03:36,909 DEBUG   HandlerThread:2891549 [handler.py:handle_request():138] handle_request: stop_status
+2023-01-13 07:03:36,909 DEBUG   SenderThread:2891549 [sender.py:send_request():315] send_request: stop_status
+2023-01-13 07:03:50,198 WARNING StreamThr :2891549 [internal.py:is_dead():386] Internal process exiting, parent pid 2891368 disappeared
+2023-01-13 07:03:50,198 ERROR   StreamThr :2891549 [internal.py:wandb_internal():147] Internal process shutdown.
+2023-01-13 07:03:50,459 INFO    MainThread:2891549 [internal.py:handle_exit():78] Internal process exited
+2023-01-13 07:03:50,460 WARNING MsgRouterThr:2891549 [router.py:message_loop():74] EOFError seen in message_loop

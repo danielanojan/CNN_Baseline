@@ -1,0 +1,11 @@
+easydict
+matplotlib
+numpy
+opencv-python
+Pillow
+pyaml
+scikit-learn
+scipy
+tqdm
+torch
+torchvision
