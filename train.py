@@ -22,16 +22,9 @@ import pandas as pd
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 from torch.utils.data import Dataset
+import datetime
 
-wandb.init(project="vgg19-cnn",
 
-config={
-    "learning_rate": 0.0001,
-    "architecture": "vgg19",
-    "dataset": "596_img_cleftlip",
-    "epochs": 20,
-    }
-)
 
 class DatasetClass(Dataset):
     def __init__(self, annotations_file,  img_dir, transform=None):
@@ -66,10 +59,23 @@ def main():
     torch.manual_seed(1)
     if args.cuda:
         torch.cuda.manual_seed(1)
-    #cudnn.benchmark = True #optimizes when the input size of the network is same. dont use when the input sizes are different.
+    # cudnn.benchmark = True #optimizes when the input size of the network is same. dont use when the input sizes are different.
 
     exp_dir = os.path.join(args.result_dir, args.exp_name)
     make_dir_if_not_exist(exp_dir)
+
+    current_date = datetime.date.today()
+    wandb.init(project=args.exp_name,
+
+               config={
+                   "learning_rate": args.lr,
+                   "architecture": args.archi,
+                   "dataset": "596_img_cleftlip",
+                   "epochs": args.epochs,
+                   "date": current_date
+               }
+    )
+
 
     #dataloader classes and the transforms are defined here. More transforms should be tried
 
@@ -101,7 +107,7 @@ def main():
     #        params += [{'params': [value]}]
 
     criterion = nn.CrossEntropyLoss()
-    optimizer_ft = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+    optimizer_ft = optim.SGD(model.parameters(), args.lr, momentum=args.momentum)
     #optimizer_ft = optim.SGD(model.parameters(), lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=False)
     exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
 
@@ -307,6 +313,8 @@ if __name__ == '__main__':
                         help='name of experiment')
     parser.add_argument('--dataset', type=str, default='cleft_lip_vgg16', metavar='M',
                         help='Dataset')
+    parser.add_argument('--archi', type=str, default='vgg19', metavar='M',
+                        help='CNN Architecture')
     parser.add_argument('--cuda', action='store_true', default=False,
                         help='enables CUDA training')
     parser.add_argument("--gpu_devices", type=int, nargs='+', default=None,
@@ -319,6 +327,8 @@ if __name__ == '__main__':
                         help='input batch size for training (default: 64)')
     parser.add_argument('--lr', type=float, default=0.0001, metavar='LR',
                         help='learning rate (default: 0.0001)')
+    parser.add_argument('--momentum', type=str, default=0.9, metavar='M',
+                        help='Momentum')
     parser.add_argument('--margin', type=float, default=1.0, metavar='M',
                         help='margin for triplet loss (default: 1.0)')
     parser.add_argument('--ckp', default=None, type=str,
