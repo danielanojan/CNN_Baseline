@@ -35,12 +35,13 @@ class DatasetClass(Dataset):
     def __len__(self):
         return len(self.img_labels)
 
+
     def __getitem__(self, idx):
         img_path = os.path.join(self.img_dir,  self.img_labels.iloc[idx, 2], self.img_labels.iloc[idx, 0])
 
         image = cv2.imread(img_path)
         #print (img_path)
-        image = cv2.resize(image, (228, 228))
+        #image = cv2.resize(image, (228, 228))
         label = self.img_labels.iloc[idx, 1]
 
         if self.transform:
@@ -70,7 +71,7 @@ def main():
                config={
                    "learning_rate": args.lr,
                    "architecture": args.archi,
-                   "dataset": "596_img_cleftlip",
+                   "dataset": "596_img_cleftlip_600_800",
                    "epochs": args.epochs,
                    "date": current_date
                }
@@ -309,7 +310,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch Siamese Example')
     parser.add_argument('--result_dir', default='data', type=str,
                         help='Directory to store results')
-    parser.add_argument('--exp_name', default='cnn_benchmark_vgg16', type=str,
+    parser.add_argument('--exp_name', default='vgg_feat.extrc_600_800', type=str,
                         help='name of experiment')
     parser.add_argument('--dataset', type=str, default='cleft_lip_vgg16', metavar='M',
                         help='Dataset')
@@ -340,18 +341,18 @@ if __name__ == '__main__':
     parser.add_argument('--train_log_step', type=int, default=1, metavar='M',
                         help='Number of iterations after which to log the loss')
     parser.add_argument('--train_annot_file',
-                        default='/home/daniel/simase_network/Cleft_lip_data/csv_files/train_file.csv',
+                        default='/home/daniel/simase_network/cleft_lip_data_600_800/csv_files/train_file.csv',
                         type=str,
                         help='path to annotation file')
     parser.add_argument('--train_data_dir',
-                        default='/home/daniel/simase_network/Cleft_lip_data/train',
+                        default='/home/daniel/simase_network/cleft_lip_data_600_800/train',
                         type=str,help='path to data Directory')
     parser.add_argument('--test_annot_file',
-                        default='/home/daniel/simase_network/Cleft_lip_data/csv_files/test_file.csv',
+                        default='/home/daniel/simase_network/cleft_lip_data_600_800/csv_files/test_file.csv',
                         type=str,
                         help='path to annotation file')
     parser.add_argument('--test_data_dir',
-                        default='/home/daniel/simase_network/Cleft_lip_data/test',
+                        default='/home/daniel/simase_network/cleft_lip_data_600_800/test',
                         type=str, help='path to data Directory')
 
     global args, device

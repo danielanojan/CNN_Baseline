@@ -5,6 +5,7 @@ import torch.nn as nn
 from model import embedding
 from torchvision import datasets, models, transforms
 
+
 class Net(nn.Module):
     def __init__(self, embeddingNet):
         super(Net, self).__init__()
@@ -52,3 +53,6 @@ def get_model(args, device):
             print("=> No checkpoint found at '{}'".format(args.ckp))
 
     return model
+
+
+

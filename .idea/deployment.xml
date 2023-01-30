@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="daniel@193.1.133.69:22 agent (6)" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" serverName="daniel@193.1.133.69:22 agent (10)" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
+      <paths name="daniel@193.1.133.69:22 agent (10)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="daniel@193.1.133.69:22 agent (5)">
         <serverdata>
           <mappings>
@@ -16,7 +23,34 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="daniel@193.1.133.69:22 agent (7)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_12" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="daniel@193.1.133.69:22 agent (8)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="daniel@193.1.133.69:22 agent (9)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="daniel@193.1.133.69:22 password (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
     </serverData>
-    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>
