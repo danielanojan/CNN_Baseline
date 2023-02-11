@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="daniel@193.1.133.69:22 agent (10)" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="daniel@cipher.ucd.ie:22 password (4)" filePermissions="420" folderPermissions="493" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false" autoUploadExternalChanges="true">
+    <option name="confirmBeforeUploading" value="false" />
     <serverData>
       <paths name="daniel@193.1.133.69:22 agent (10)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="daniel@193.1.133.69:22 agent (11)">
         <serverdata>
           <mappings>
             <mapping deploy="/home/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
@@ -51,6 +59,56 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="daniel@cipher.ucd.ie:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/mnt/recsys/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="daniel@cipher.ucd.ie:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/mnt/recsys/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="daniel@cipher.ucd.ie:22 password (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/mnt/recsys/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="daniel@cipher.ucd.ie:22 password (4)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/mnt/recsys/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="daniel@theengine.ucd.ie:22 agent">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_909" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="daniel@theengine.ucd.ie:22 agent (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_276" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="daniel@theengine.ucd.ie:22 agent (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/mnt/recsys/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

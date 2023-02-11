@@ -5,6 +5,7 @@ import torch.nn as nn
 from model import embedding
 from torchvision import datasets, models, transforms
 
+import timm
 
 class Net(nn.Module):
     def __init__(self, embeddingNet):
@@ -15,24 +16,42 @@ class Net(nn.Module):
         E1 = self.embeddingNet(i1)
         return E1
 
+class NeuralNet(nn.Module):
+    def __init__(self):
+        super(NeuralNet, self).__init__()
+        self.vgg = models.vgg19(weights = 'IMAGENET1K_V1')
+        #self.features = self.vgg.features
+        #self.avgpool = self.vgg.avgpool
+        #self.classifier = self.vgg.classifier
+        #in_feat = self.classifier[6].in_features
+        #self.classifier[6] =nn.Linear(in_features = in_feat, out_features = 3)
+        #self.features = nn.Sequential(*list(self.features))
+        #self.classifier = nn.Sequential(*list(self.classifier))
+    def forward(self, x):
+        out = self.vgg.features(x)
+        #out = self.avgpool(out)
+        #out = self.classifier(out)
 
 def get_model(args, device):
     # Model
     embeddingNet = None
-    if (args.dataset == 'cleft_lip_resnet'):
+    if (args.archi == 'resnet18'):
         model = models.resnet18(pretrained=True)
         num_ftrs = model.fc.in_features
         model.fc = nn.Linear(num_ftrs, 3)
-    elif (args.dataset == 'cleft_lip_alexnet'):
+    elif (args.archi == 'alexnet'):
         model = torch.hub.load('pytorch/vision:v0.10.0', 'alexnet', pretrained=True)
         model.classifier[4] = nn.Linear(4096, 1024)
         model.classifier[6] = nn.Linear(1024, 3)
-    elif (args.dataset == 'cleft_lip_vgg16'):
+    elif (args.archi == 'vgg16'):
         model = models.vgg16(pretrained=True)
         num_ftrs = model.classifier[6].in_features
         model.classifier[6] = nn.Linear(model.classifier[6].in_features, 3)
+    elif (args.archi == 'MaxxViT_tiny_512'):
+        model = timm.create_model('maxvit_tiny_tf_512.in1k', pretrained=True)
+        model.head.fc = nn.Linear(model.head.fc.in_features, 3, bias=True)
     else:
-        print("Dataset %s not supported " % args.dataset)
+        print("Architecture %s not supported " % args.archi)
         return None
 
     print([n for n, _ in model.named_children()])

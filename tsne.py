@@ -27,6 +27,8 @@ import pandas as pd
 from torchvision.io import read_image
 from torchvision import datasets
 from torch.utils.data import Dataset
+from model.net import get_model, NeuralNet
+
 means = (0.485,)
 stds = (0.229,)
 transform = transforms.Compose([
@@ -50,7 +52,7 @@ class TestingDataset(Dataset):
 
         image = cv2.imread(img_path)
         print (img_path)
-        image = cv2.resize(image, (228, 228))
+        #image = cv2.resize(image, (228, 228))
         label = self.img_labels.iloc[idx, 1]
 
         if self.transform:
@@ -88,14 +90,14 @@ def main():
         #    embeddingNet = embedding.EmbeddingResnet()
         #elif (args.dataset == 'mnist') or (args.dataset == 'fmnist'):
         #    embeddingNet = embedding.EmbeddingLeNet()
-        if (args.dataset == 'cleft_lip_alexnet'):
-            embeddingNet = embedding.EmbeddingAlexNet()
-        elif (args.dataset == 'cleft_lip_resnet'):
-            embeddingNet = embedding.EmbeddingResnet()
-        else:
-            print("Dataset {} not supported ".format(args.dataset))
-            return
-
+        #if (args.dataset == 'cleft_lip_alexnet'):
+        #    embeddingNet = embedding.EmbeddingAlexNet()
+        #elif (args.dataset == 'cleft_lip_resnet'):
+        #    embeddingNet = embedding.EmbeddingResnet()
+        #else:
+        #    print("Dataset {} not supported ".format(args.dataset))
+        #    return
+        embeddingNet = get_model(args, device)
         model_dict = None
         if args.ckp is not None:
             if os.path.isfile(args.ckp):
@@ -225,18 +227,18 @@ def vis_tSNE(embeddings, labels):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch Siamese Example')
-    parser.add_argument('--exp_name', default='alexnet_triplet_2023', type=str,
+    parser.add_argument('--exp_name', default='vgg_feat.extrc_600_800', type=str,
                         help='name of experiment')
     parser.add_argument('--cuda', action='store_true', default=True,
                         help='enables CUDA training')
-    parser.add_argument('--ckp', default='/home/daniel/simase_network/pytorch-siamese-triplet/data/resnet_triplet_2023/checkpoint_1.pth', type=str,
+    parser.add_argument('--ckp', default='/mnt/recsys/daniel/simase_network/CNN_baseline/data/vgg_feat.extrc_600_800/checkpoint_1.pth', type=str,
                         help='path to load checkpoint')
     parser.add_argument('--annot_file',
-                        default='/home/daniel/simase_network/Cleft_lip_data/csv_files/test_file.csv',
+                        default='/mnt/recsys/daniel/simase_network/Cleft_lip_data/csv_files/test_file.csv',
                         type=str,
                         help='path to annotation file')
     parser.add_argument('--data_dir',
-                        default='/home/daniel/simase_network/Cleft_lip_data/test',
+                        default='/mnt/recsys//daniel/simase_network/Cleft_lip_data/test',
                         type=str,
                         help='path to data Directory')
     parser.add_argument('--dataset', type=str, default='cleft_lip_resnet', metavar='M',

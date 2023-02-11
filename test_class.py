@@ -24,9 +24,10 @@ import matplotlib.pyplot as plt
 from torch.utils.data import Dataset
 import datetime
 
-from model.net import NeuralNetwork
+from model.net import NeuralNet
 
 
-#net = NeuralNetwork()
-#print ('hello')
+net = NeuralNet()
+#print (net)
+print(list(net.parameters()))
 #print (net)

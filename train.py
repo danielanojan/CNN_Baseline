@@ -1,7 +1,7 @@
 import _init_paths
 import os
 import argparse
-
+import sys
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -11,7 +11,7 @@ from torch.autograd import Variable
 import torch.backends.cudnn as cudnn
 from torchvision import datasets, transforms
 import cv2
-from model.net import get_model
+from model.net import get_model, NeuralNet
 from dataloader.triplet_img_loader import get_loader
 from utils.gen_utils import make_dir_if_not_exist
 from utils.vis_utils import vis_with_paths, vis_with_paths_and_bboxes
@@ -23,7 +23,7 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 from torch.utils.data import Dataset
 import datetime
-
+from sklearn.metrics import confusion_matrix
 
 
 class DatasetClass(Dataset):
@@ -57,6 +57,7 @@ class DatasetClass(Dataset):
 
 
 def main():
+    print (sys.path)
     torch.manual_seed(1)
     if args.cuda:
         torch.cuda.manual_seed(1)
@@ -79,17 +80,28 @@ def main():
 
 
     #dataloader classes and the transforms are defined here. More transforms should be tried
+    if args.archi == 'vgg16' or  'alexnet' or 'resnet18':
+        train_transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                      std=[0.229, 0.224, 0.225])
 
-    train_transform = transforms.Compose([
-        transforms.ToTensor(), 
-        transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                  std=[0.229, 0.224, 0.225])
-        
-    ])
-    test_transform = transforms.Compose([
-        transforms.ToTensor()
-    ])
+        ])
+        test_transform = transforms.Compose([
+            transforms.ToTensor()
+        ])
+    elif args.archi == 'MaxxViT_tiny_512':
+        train_transform = transforms.Compose([
+            transforms.Resize(size=(512, 512), interpolation= bicubic, max_size=None, antialias=None),
+            transforms.CenterCrop(size=(512, 512)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.5000, 0.5000, 0.5000],
+                                 std=[0.5000, 0.5000, 0.5000])
 
+        ])
+        test_transform = transforms.Compose([
+            transforms.ToTensor()
+        ])
     test_dataset = DatasetClass(args.test_annot_file, args.test_data_dir, test_transform)
     test_data_loader = torch.utils.data.DataLoader(test_dataset, batch_size=1, shuffle=False)
 
@@ -100,6 +112,10 @@ def main():
     model = get_model(args, device)
     if model is None:
         return
+    #model = NeuralNet()
+    if args.cuda:
+        model = nn.DataParallel(model, device_ids=args.gpu_devices)
+    model = model.to(device)
 
     # Criterion and Optimizer
     #params = []
@@ -310,12 +326,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch Siamese Example')
     parser.add_argument('--result_dir', default='data', type=str,
                         help='Directory to store results')
-    parser.add_argument('--exp_name', default='vgg_feat.extrc_600_800', type=str,
+    parser.add_argument('--exp_name', default='maxvit_512', type=str,
                         help='name of experiment')
-    parser.add_argument('--dataset', type=str, default='cleft_lip_vgg16', metavar='M',
-                        help='Dataset')
-    parser.add_argument('--archi', type=str, default='vgg19', metavar='M',
-                        help='CNN Architecture')
+    parser.add_argument('--archi', type=str, default='vgg16', metavar='M',
+                        help='CNN Architectunre[vgg16, alexnet, resnet18, MaxxViT_tiny_512]')
     parser.add_argument('--cuda', action='store_true', default=False,
                         help='enables CUDA training')
     parser.add_argument("--gpu_devices", type=int, nargs='+', default=None,
@@ -341,18 +355,18 @@ if __name__ == '__main__':
     parser.add_argument('--train_log_step', type=int, default=1, metavar='M',
                         help='Number of iterations after which to log the loss')
     parser.add_argument('--train_annot_file',
-                        default='/home/daniel/simase_network/cleft_lip_data_600_800/csv_files/train_file.csv',
+                        default='/mnt/recsys/daniel/simase_network/cleft_lip_data_600_800/csv_files/train_file.csv',
                         type=str,
                         help='path to annotation file')
     parser.add_argument('--train_data_dir',
-                        default='/home/daniel/simase_network/cleft_lip_data_600_800/train',
+                        default='/mnt/recsys/daniel/simase_network/cleft_lip_data_600_800/train',
                         type=str,help='path to data Directory')
     parser.add_argument('--test_annot_file',
-                        default='/home/daniel/simase_network/cleft_lip_data_600_800/csv_files/test_file.csv',
+                        default='/mnt/recsys/daniel/simase_network/cleft_lip_data_600_800/csv_files/test_file.csv',
                         type=str,
                         help='path to annotation file')
     parser.add_argument('--test_data_dir',
-                        default='/home/daniel/simase_network/cleft_lip_data_600_800/test',
+                        default='/mnt/recsys/daniel/simase_network/cleft_lip_data_600_800/test',
                         type=str, help='path to data Directory')
 
     global args, device
