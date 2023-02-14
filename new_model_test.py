@@ -4,19 +4,37 @@ from urllib.request import urlopen
 from PIL import Image
 import timm
 import torch
+#import torchvision
 
-img = Image.open(
-    urlopen('https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/beignets-task-guide.png'))
 
-model = timm.create_model('maxvit_tiny_tf_512.in1k', pretrained=True)
-model = model.eval()
-print ( model)
-# get model specific transforms (normalization, resize)
-data_config = timm.data.resolve_model_data_config(model)
-transforms = timm.data.create_transform(**data_config, is_training=False)
-img_b4 = img.copy()
-img_mid = transforms(img)
-img_aftr = transforms(img).unsqueeze(0)
-output = model(transforms(img).unsqueeze(0))  # unsqueeze single image into batch of 1
+#net = torchvision.models.resnet18(pretrained=True)
+#for name, param in net.named_parameters():
+#    print (name, param.requires_grad)
 
-top5_probabilities, top5_class_indices = torch.topk(output.softmax(dim=1) * 100, k=5)
+#for (name, module) in net.named_children():
+#     print(name)
+
+
+import os
+import csv
+train_dir = '/mnt/recsys/daniel/simase_network/childadult_train/train'
+
+with open('/mnt/recsys/daniel/simase_network/childadult_train/csv_files/train.csv', 'a') as file:
+
+    writerObj = csv.writer(file)
+    writerObj.writerow(['Filen_name','label','class'])
+    for root, dirs, files in os.walk(train_dir):
+        for filename in files:
+            if filename.endswith('.png'):
+                label = root.split('/')[-1]
+                print (label)
+                if label == 'child':
+                    int_value = 0
+                elif label == 'adult':
+                    int_value = 1
+                writerObj.writerow([filename, str(int_value), label])
+
+
+                #print(os.path.join(root, filename))
+            
+

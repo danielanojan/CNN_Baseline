@@ -332,16 +332,16 @@ if __name__ == '__main__':
                         help='learning rate (default: 0.0001)')
     parser.add_argument('--momentum', type=str, default=0.9, metavar='M',
                         help='Momentum')
-    parser.add_argument('--ckp', default=None, type=str,
+    parser.add_argument('--ckp', default='/mnt/recsys/daniel/simase_network/CNN_baseline/childadult/maxvit_childadult/checkpoint_1.pth', type=str,
                         help='path to load checkpoint')
     parser.add_argument('--train_log_step', type=int, default=1, metavar='M',
                         help='Number of iterations after which to log the loss')
-    parser.add_argument('--num_class', type=int, default=2, metavar='M',
+    parser.add_argument('--num_class', type=int, default=3, metavar='M',
                         help='num of classes in dataset')
     parser.add_argument('--base_dir',
-                        default='/mnt/recsys/daniel/simase_network/childadult_train',
+                        default='/mnt/recsys/daniel/simase_network/cleft_lip_data_600_800',
                         type=str,
-                        help='path to base directory of training')
+                        help='childadult_train or cleft_lip_data_600_800')
 
 
 

@@ -1,3 +1,5 @@
+from torchvision.transforms import InterpolationMode
+
 import _init_paths
 import os
 import argparse
@@ -11,7 +13,7 @@ from torch.autograd import Variable
 import torch.backends.cudnn as cudnn
 from torchvision import datasets, transforms
 import cv2
-from model.net import get_model, NeuralNet
+from model.net_pretrained import get_model, NeuralNet
 from dataloader.triplet_img_loader import get_loader
 from utils.gen_utils import make_dir_if_not_exist
 from utils.vis_utils import vis_with_paths, vis_with_paths_and_bboxes
@@ -24,12 +26,14 @@ import matplotlib.pyplot as plt
 from torch.utils.data import Dataset
 import datetime
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
-
+from PIL import Image
 class DatasetClass(Dataset):
-    def __init__(self, annotations_file,  img_dir, transform=None):
+    def __init__(self, annotations_file,  img_dir, args, transform=None):
         self.img_dir = img_dir
         self.transform = transform
         self.img_labels = pd.read_csv(annotations_file)
+
+
 
     def __len__(self):
         return len(self.img_labels)
@@ -40,7 +44,7 @@ class DatasetClass(Dataset):
 
         image = cv2.imread(img_path)
         #print (img_path)
-        #image = cv2.resize(image, (228, 228))
+
         label = self.img_labels.iloc[idx, 1]
 
         if self.transform:
@@ -49,7 +53,6 @@ class DatasetClass(Dataset):
 
 
 def main():
-    print(sys.path)
     torch.manual_seed(1)
     if args.cuda:
         torch.cuda.manual_seed(1)
@@ -67,12 +70,12 @@ def main():
     model = get_model(args, device)
     if model is None:
         return
+    print (model)
     # model = NeuralNet()
-    if args.cuda:
-        model = nn.DataParallel(model, device_ids=args.gpu_devices)
-    model = model.to(device)
+
+
     # test_loss, accuracy_zero_margin = test(test_data_loader, model, criterion)
-    dataset_emb = DatasetClass(args.annot_file, args.data_dir, transform)
+    dataset_emb = DatasetClass(args.annot_file, args.data_dir, args, transform)
     data_loader_emb = torch.utils.data.DataLoader(dataset_emb, batch_size=1, shuffle=False)
 
     embedding_dl_train = data_loader_emb
@@ -87,6 +90,15 @@ def main():
         disp.plot()
         #disp.xaxis.set_ticklabels(['healthy','mild','severe'])
         plt.show()
+    if args.accuracy_values:
+        running_corrects = 0
+        for emb, label in zip(embeddings, labels.reshape(-1, 1)):
+            pred = emb.argmax()
+            if pred==label[0]:
+
+                running_corrects += 1
+        accuracy = running_corrects / len(data_loader_emb)
+    print (accuracy)
 
 
 def generate_emb(data_loader, model):
@@ -135,33 +147,35 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch Siamese Example')
     parser.add_argument('--result_dir', default='data', type=str,
                         help='Directory to store results')
-    parser.add_argument('--exp_name', default='vgg_feat.extrc_600_800', type=str,
+    parser.add_argument('--exp_name', default='vgg_test', type=str,
                         help='name of experiment')
     parser.add_argument('--finetune',action='store_true', default=False,
                         help='freeze/unfreeze last layers')
-    parser.add_argument('--archi', type=str, default='vgg19', metavar='M',
-                        help='CNN Architecture')
-    parser.add_argument('--cuda', action='store_true', default=False,
+    parser.add_argument('--archi', type=str, default='vgg16', metavar='M',
+                        help='CNN Architectunre[vgg16, alexnet, resnet18, MaxxViT_tiny_512, mobilenet_v3_large, efficientnet_v2_large]')
+    parser.add_argument('--cuda', action='store_true', default=True,
                         help='enables CUDA training')
-    parser.add_argument("--gpu_devices", type=int, nargs='+', default=None,
+    parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0,1],
                         help="List of GPU Devices to train on")
-    parser.add_argument('--batch_size', type=int, default=1, metavar='N',
+    parser.add_argument('--batch_size', type=int, default=0, metavar='N',
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--ckp', default=None, type=str,
-                        help='checkpoint')
 
     parser.add_argument('--pca', action='store_true', default= False)
     parser.add_argument('--confusion_matrix', action='store_true', default=True)
-
+    parser.add_argument('--accuracy_values', action='store_true', default=True)
     parser.add_argument('--num_samples', type=int, default=98, metavar='M',
                         help='number of samples')
     parser.add_argument('--annot_file',
-                        default='/mnt/recsys/daniel/simase_network/cleft_lip_data_600_800/csv_files/test_file.csv',
+                        default='/mnt/recsys/daniel/simase_network/cleft_lip_data_600_800/csv_files/train_file.csv',
                         type=str,
                         help='path to annotation file')
     parser.add_argument('--data_dir',
-                        default='/mnt/recsys/daniel/simase_network/cleft_lip_data_600_800/test',
+                        default='/mnt/recsys/daniel/simase_network/cleft_lip_data_600_800/train',
                         type=str, help='path to data Directory')
+    parser.add_argument('--ckp',
+                        default='/mnt/recsys/daniel/simase_network/CNN_baseline/data/vgg_test/checkpoint_1.pth',
+                        type=str,
+                        help='path to pretrained file path')
 
     global args, device
     args = parser.parse_args()
