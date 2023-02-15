@@ -27,6 +27,7 @@ from torch.utils.data import Dataset
 import datetime
 from sklearn.metrics import confusion_matrix
 from PIL import Image
+import csv
 
 class DatasetClass(Dataset):
     def __init__(self, annotations_file,  img_dir, transform=None):
@@ -64,24 +65,33 @@ def main():
     if args.cuda:
         torch.cuda.manual_seed(1)
     # cudnn.benchmark = True #optimizes when the input size of the network is same. dont use when the input sizes are different.
-    make_dir_if_not_exist(args.result_dir)
-    exp_dir = os.path.join(args.result_dir, args.exp_name)
+    rootdir = os.getcwd()
+    parent_dir = os.path.abspath(os.path.join(rootdir, os.pardir))
+    make_dir_if_not_exist(os.path.join(rootdir, 'experiments', args.exp))
+    exp_dir = os.path.join(rootdir, 'experiments', args.exp, args.archi)
     make_dir_if_not_exist(exp_dir)
 
-    train_annot_file = os.path.join(args.base_dir, 'csv_files/train_file.csv')
-    test_annot_file = os.path.join(args.base_dir, 'csv_files/test_file.csv')
-    train_data_dir = os.path.join(args.base_dir, 'train')
-    test_data_dir = os.path.join(args.base_dir, 'test')
-    print (train_annot_file, test_annot_file, train_data_dir, test_data_dir)
+    train_annot_file = os.path.join(parent_dir,args.dataset,  'csv_files/train_file.csv')
+    test_annot_file = os.path.join(parent_dir,args.dataset, 'csv_files/test_file.csv')
+    train_data_dir = os.path.join(parent_dir,args.dataset, 'train')
+    test_data_dir = os.path.join(parent_dir,args.dataset, 'test')
+
+    pca_graph = False
+
     current_date = datetime.date.today()
-    wandb.init(project=args.exp_name,
+    project_name = args.exp + "_" + args.archi
+    wandb.init(project=project_name,
 
                config={
                    "learning_rate": args.lr,
                    "architecture": args.archi,
-                   "dataset": "596_img_cleftlip_600_800",
-                   "epochs": args.epochs,
-                   "date": current_date
+                   "dataset": args.dataset,
+                   "momentum": args.momentum,
+                   "date": current_date,
+                   "batch_size" : args.batch_size,
+                   "optimizer" : 'SGD',
+                   "loss_fn" : "CrossEntropy"
+
                }
     )
 
@@ -123,9 +133,6 @@ def main():
     model = get_model(args, device)
     if model is None:
         return
-    #model = NeuralNet()
-
-
 
     # Criterion and Optimizer
     #params = []
@@ -142,6 +149,12 @@ def main():
     #optimizer = optim.Adam(params, lr=args.lr)
     best_acc = 0.0
     # Train Test Loop
+    accuracy_csv_file = os.path.join(exp_dir, 'Accuracy_values.csv')
+    with open(accuracy_csv_file, mode='a') as file:
+        file_writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        file_writer.writerow(["Train Acc", "Test Acc"])
+
+
     for epoch in range(1, args.epochs + 1):
         print ("EPOCH ---------------------", epoch)
         for phase in ['train', 'val']:
@@ -155,27 +168,24 @@ def main():
                 running_loss = 0.0
                 running_corrects = 0
 
-                # Init data loaders
-                #train_data_loader, test_data_loader = get_loader(args)
-                # Test train
-
 
                 test_epoch_loss, test_epoch_acc = test(test_data_loader, model, criterion, optimizer_ft, epoch, running_loss)
 
-                #test_loss, accuracy_zero_margin = test(test_data_loader, model, criterion)
-                test_dataset_emb = DatasetClass(test_annot_file, test_data_dir, test_transform)
-                test_data_loader_emb = torch.utils.data.DataLoader(test_dataset_emb, batch_size=1, shuffle=False)
 
-                train_dataset_emb = DatasetClass(train_annot_file, train_data_dir, train_transform)
-                train_data_loader_emb = torch.utils.data.DataLoader(train_dataset_emb, batch_size=1, shuffle=True)
+                if pca_graph:
+                    test_dataset_emb = DatasetClass(test_annot_file, test_data_dir, test_transform)
+                    test_data_loader_emb = torch.utils.data.DataLoader(test_dataset_emb, batch_size=1, shuffle=False)
 
-                embedding_dl_train = test_data_loader_emb
-                embeddings_train, labels_train = generate_emb(embedding_dl_train, model)
-                pca_plot(embeddings_train, labels_train, epoch, label=0000)
+                    train_dataset_emb = DatasetClass(train_annot_file, train_data_dir, train_transform)
+                    train_data_loader_emb = torch.utils.data.DataLoader(train_dataset_emb, batch_size=1, shuffle=True)
 
-                embedding_dl_test = train_data_loader_emb
-                embeddings_test, labels_test = generate_emb(embedding_dl_test, model)
-                pca_plot(embeddings_test, labels_test, epoch, label=11111)
+                    embedding_dl_train = test_data_loader_emb
+                    embeddings_train, labels_train = generate_emb(embedding_dl_train, model)
+                    pca_plot(embeddings_train, labels_train, epoch, label=0000)
+
+                    embedding_dl_test = train_data_loader_emb
+                    embeddings_test, labels_test = generate_emb(embedding_dl_test, model)
+                    pca_plot(embeddings_test, labels_test, epoch, label=11111)
 
                 # Save model
                 model_to_save = {
@@ -186,6 +196,9 @@ def main():
                     file_name = os.path.join(exp_dir, "checkpoint_" + str(epoch) + ".pth")
                     save_checkpoint(model_to_save, file_name)
                 wandb.log({'train_loss': train_epoch_loss, 'train_acc': train_epoch_acc,  'test_loss': test_epoch_loss, 'test_acc': test_epoch_acc })
+                with open(accuracy_csv_file, mode='a') as file:
+                    file_writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    file_writer.writerow([train_epoch_acc, test_epoch_acc])
 
 def train(data, model, criterion, optimizer, epoch, train_running_loss, scheduler):
     phase = 'train'
@@ -239,7 +252,7 @@ def test(data, model, criterion, optimizer, epoch, test_running_loss):
         # zero the parameter gradients
         optimizer.zero_grad()
         # track history if only in train
-        with torch.set_grad_enabled(phase == 'train'):
+        with torch.set_grad_enabled(phase == 'test'):
             outputs = model(inputs)
             _, preds = torch.max(outputs, 1)
             loss = criterion(outputs, labels)
@@ -247,11 +260,6 @@ def test(data, model, criterion, optimizer, epoch, test_running_loss):
         # statistics
         test_running_loss += loss.item() * inputs.size(0)
         running_corrects += torch.sum(preds == labels.data)
-
-        # log_step = args.train_log_step
-        # if (batch_idx % log_step == 0) and (batch_idx != 0):
-        #    print('Train Epoch: {} [{}/{}] \t Loss: {:.4f}'.format(epoch, batch_idx, len(data), total_loss / log_step))
-        #    total_loss = 0
     test_epoch_loss = test_running_loss / len(data.dataset)
     test_epoch_acc = running_corrects.double() / len(data.dataset)
     print('{}  {} Loss: {:.4f} Acc: {:.4f}'.format(epoch,
@@ -263,6 +271,7 @@ def test(data, model, criterion, optimizer, epoch, test_running_loss):
 def save_checkpoint(state, file_name):
     torch.save(state, file_name)
 
+#generate embeddings and pca can go in one function and can have in a seperate utils file
 def generate_emb(data_loader, model):
     with torch.no_grad():
         model.eval()
@@ -281,68 +290,71 @@ def generate_emb(data_loader, model):
             labels = np.concatenate((labels, batch_labels), axis=0) if labels is not None else batch_labels
     return embeddings, labels
 
-def pca_plot(embeddings, labels, epoch, label):
+def pca_plot(embeddings, labels, epoch, label, exp_dir):
     final_data = {
         'embeddings': embeddings,
         'labels': labels
     }
-    matrix = "pca"
-
-    if matrix == "pca":
-        label_list = pd.DataFrame(labels, columns=["label"])
-        pca = PCA(n_components=2)
-        principalcomponents = pca.fit_transform(embeddings)
-        pcadf = pd.DataFrame(principalcomponents, columns=['pc1', 'pc2'])
-        pcadf = pd.concat([pcadf, label_list], axis=1)
-        plt.figure(figsize=(16, 9))
-        groups = pcadf.groupby('label')
-        for name, group in groups:
-            plt.plot(group.pc1, group.pc2, marker='o', linestyle='', markersize=10, label=name)
-        plt.legend()
-        plt.xlabel("PCA1")
-        plt.ylabel("PCA2")
-        exp_dir = os.path.join(args.result_dir, args.exp_name)
-        plt.savefig(os.path.join(exp_dir, 'plot_PCA{}_{}.png'.format(label, epoch)))
-        if args.display:
-            plt.show()
+    label_list = pd.DataFrame(labels, columns=["label"])
+    pca = PCA(n_components=2)
+    principalcomponents = pca.fit_transform(embeddings)
+    pcadf = pd.DataFrame(principalcomponents, columns=['pc1', 'pc2'])
+    pcadf = pd.concat([pcadf, label_list], axis=1)
+    plt.figure(figsize=(16, 9))
+    groups = pcadf.groupby('label')
+    for name, group in groups:
+        plt.plot(group.pc1, group.pc2, marker='o', linestyle='', markersize=10, label=name)
+    plt.legend()
+    plt.xlabel("PCA1")
+    plt.ylabel("PCA2")
+    ############################################
+    plt.savefig(os.path.join(exp_dir, 'plot_PCA{}_{}.png'.format(label, epoch)))
+    if args.display:
+        plt.show()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch Siamese Example')
-    parser.add_argument('--result_dir', default='childadult', type=str,
-                        help='Directory to store results')
-    parser.add_argument('--exp_name', default='maxvit_childadult', type=str,
-                        help='name of experiment')
+
+    parser.add_argument('--dataset', default='cleft_lip_data_600_800', type=str,
+                        help='[childadult_train/cleft_lip_data_600_800]')
+    parser.add_argument('--exp', default='cleftLip', type=str,
+                        help='Directory to store results[childAdult/ cleftLip/ cleftLipFT]')
+
     parser.add_argument('--archi', type=str, default='MaxxViT_tiny_512', metavar='M',
                         help='CNN Architectunre[vgg16, alexnet, resnet18, MaxxViT_tiny_512, mobilenet_v3_large, efficientnet_v2_large]')
+    parser.add_argument('--num_class', type=int, default=3, metavar='M',
+                        help='num of classes in dataset')
+
+    parser.add_argument('--finetune', action='store_true', default=False,
+                    help='freezing last layers')
+    parser.add_argument('--ckp', default=None, type=str,
+                        help='path to load checkpoint')
+
     parser.add_argument('--cuda', action='store_true', default=True,
                         help='enables CUDA training')
-    parser.add_argument('--finetune', action='store_true', default=False,
-                        help='freezing last layers')
-    parser.add_argument('--display', action='store_true', default=True,
-                        help='display option')
-    parser.add_argument("--gpu_devices", type=int, nargs='+', default=[0],
+    parser.add_argument("--cuda_id", type=int, default= 1 ,
                         help="List of GPU Devices to train on")
+
+    parser.add_argument('--pca_plot', action='store_true', default=False,
+                        help='display option')
+    parser.add_argument('--display', action='store_true', default=False,
+                        help='display option')
+
+    parser.add_argument('--lr', type=float, default=0.00001, metavar='LR',
+                        help='learning rate (default: 0.0001)')
+    parser.add_argument('--momentum', type=str, default=0.9, metavar='M',
+                        help='Momentum')
+
     parser.add_argument('--epochs', type=int, default=15, metavar='N',
                         help='number of epochs to train (default: 10)')
     parser.add_argument('--ckp_freq', type=int, default=1, metavar='N',
                         help='Checkpoint Frequency (default: 1)')
     parser.add_argument('--batch_size', type=int, default=1, metavar='N',
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--lr', type=float, default=0.00001, metavar='LR',
-                        help='learning rate (default: 0.0001)')
-    parser.add_argument('--momentum', type=str, default=0.9, metavar='M',
-                        help='Momentum')
-    parser.add_argument('--ckp', default=None, type=str,
-                        help='path to load checkpoint')
+
+
     parser.add_argument('--train_log_step', type=int, default=1, metavar='M',
                         help='Number of iterations after which to log the loss')
-    parser.add_argument('--num_class', type=int, default=2, metavar='M',
-                        help='num of classes in dataset')
-    parser.add_argument('--base_dir',
-                        default='/mnt/recsys/daniel/simase_network/childadult_train',
-                        type=str,
-                        help='path to base directory of training')
-
 
 
 
@@ -350,13 +362,11 @@ if __name__ == '__main__':
     global args, device
     args = parser.parse_args()
     kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
-    args.cuda = args.cuda and torch.cuda.is_available()
-    cfg_from_file("config/test.yaml")
 
+    args.cuda = args.cuda and torch.cuda.is_available()
     if args.cuda:
         device = 'cuda'
-        if args.gpu_devices is None:
-            args.gpu_devices = [1,2]
+        torch.cuda.set_device(args.cuda_id)
     else:
         device = 'cpu'
     main()

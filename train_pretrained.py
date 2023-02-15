@@ -13,7 +13,7 @@ from torch.autograd import Variable
 import torch.backends.cudnn as cudnn
 from torchvision import datasets, transforms
 import cv2
-from model.net import get_model, NeuralNet
+from model.net_pretrained import get_model, NeuralNet
 from dataloader.triplet_img_loader import get_loader
 from utils.gen_utils import make_dir_if_not_exist
 from utils.vis_utils import vis_with_paths, vis_with_paths_and_bboxes

@@ -93,7 +93,7 @@ def get_model(args, device):
     elif (args.archi == 'efficientnet_v2_large'):
         # acc@1 = 85.5 acc@5 = 97.7 trained on 232x232
         #https://pytorch.org/vision/stable/models/generated/torchvision.models.efficientnet_v2_l.html#torchvision.models.efficientnet_v2_l
-        model = models.efficientnet_v2_l(weights='DEFAULT')
+        model = models.efficientnet_v2_s(weights='DEFAULT')
         model.classifier[1] = nn.Linear(model.classifier[1].in_features, args.num_class, bias=True)
         if args.finetune:
             for (name, module) in model.named_children():
@@ -114,8 +114,8 @@ def get_model(args, device):
     #print([n for n, _ in model.named_children()])
     ##########this can be changed?
     #model = Net(embeddingNet)
-    if args.cuda:
-        model = nn.DataParallel(model, device_ids=args.gpu_devices)
+    #if args.cuda:
+    #    model = nn.DataParallel(model, device_ids=args.gpu_devices)
     model = model.to(device)
 
     # Load weights if provided
