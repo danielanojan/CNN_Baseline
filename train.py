@@ -46,10 +46,10 @@ class DatasetClass(Dataset):
         #print (img_path)
         #image = cv2.resize(image, (228, 228))
         label = self.img_labels.iloc[idx, 1]
-
+        img_name = self.img_labels.iloc[idx, 0]
         if self.transform:
             image = self.transform(image)
-        return image, label
+        return image, label, img_name
 
 
 
@@ -68,11 +68,13 @@ def main():
     rootdir = os.getcwd()
     parent_dir = os.path.abspath(os.path.join(rootdir, os.pardir))
     make_dir_if_not_exist(os.path.join(rootdir, 'experiments', args.exp))
-    exp_dir = os.path.join(rootdir, 'experiments', args.exp, args.archi)
+    archi_dir = os.path.join(rootdir, 'experiments', args.exp, args.archi)
+    make_dir_if_not_exist(archi_dir)
+    exp_dir = os.path.join(rootdir, 'experiments', args.exp, archi_dir, args.exp_type )
     make_dir_if_not_exist(exp_dir)
 
-    train_annot_file = os.path.join(parent_dir,args.dataset,  'csv_files/train_file.csv')
-    test_annot_file = os.path.join(parent_dir,args.dataset, 'csv_files/test_file.csv')
+    train_annot_file = os.path.join(parent_dir,args.dataset,  'csv_files_mild_severe/train_file.csv')
+    test_annot_file = os.path.join(parent_dir,args.dataset, 'csv_files_mild_severe/test_file.csv')
     train_data_dir = os.path.join(parent_dir,args.dataset, 'train')
     test_data_dir = os.path.join(parent_dir,args.dataset, 'test')
 
@@ -89,8 +91,9 @@ def main():
                    "momentum": args.momentum,
                    "date": current_date,
                    "batch_size" : args.batch_size,
-                   "optimizer" : 'SGD',
-                   "loss_fn" : "CrossEntropy"
+                   "optimizer" : 'ADAM',
+                   "loss_fn" : "CrossEntropy",
+                   "other_comments": "Baseline"
 
                }
     )
@@ -130,7 +133,8 @@ def main():
     train_data_loader = torch.utils.data.DataLoader(train_dataset, batch_size=1, shuffle=True)
 
     # Build Model
-    model = get_model(args, device)
+    ckp_path = None
+    model = get_model(args, device, ckp_path)
     if model is None:
         return
 
@@ -139,12 +143,15 @@ def main():
     #for key, value in dict(model.named_parameters()).items():
     #    if value.requires_grad:
     #        params += [{'params': [value]}]
-
-    criterion = nn.CrossEntropyLoss()
-    optimizer_ft = optim.SGD(model.parameters(), args.lr, momentum=args.momentum)
+    if args.num_class == 2:
+        criterion = nn.BCEWithLogitsLoss()
+    else:
+        criterion = nn.CrossEntropyLoss()
+    #optimizer_ft = optim.SGD(model.parameters(), args.lr, momentum=args.momentum)
     #optimizer_ft = optim.SGD(model.parameters(), lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=False)
+    optimizer_ft = optim.Adam(model.parameters(), lr=args.lr)
     exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
-
+    #exp_lr_scheduler = None
     #criterion = torch.nn.MarginRankingLoss(margin=args.margin)
     #optimizer = optim.Adam(params, lr=args.lr)
     best_acc = 0.0
@@ -190,11 +197,17 @@ def main():
                 # Save model
                 model_to_save = {
                     "epoch": epoch + 1,
-                    'state_dict': model.state_dict(),
+                    'model_state_dict': model.state_dict(),
+                    'optimizer_state_dict': optimizer_ft.state_dict(),
+                    'training_loss': train_epoch_loss,
+                    'testing_loss': test_epoch_loss,
+                    'training_acc': train_epoch_acc,
+                    'testing_acc': test_epoch_acc,
+
                 }
                 if epoch % args.ckp_freq == 0:
                     file_name = os.path.join(exp_dir, "checkpoint_" + str(epoch) + ".pth")
-                    save_checkpoint(model_to_save, file_name)
+                    save_checkpoint(model.state_dict(), file_name)
                 wandb.log({'train_loss': train_epoch_loss, 'train_acc': train_epoch_acc,  'test_loss': test_epoch_loss, 'test_acc': test_epoch_acc })
                 with open(accuracy_csv_file, mode='a') as file:
                     file_writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -205,7 +218,7 @@ def train(data, model, criterion, optimizer, epoch, train_running_loss, schedule
     print("******** Training ********")
     running_corrects = 0
 
-    for inputs, labels in data:
+    for inputs, labels, img_name in data:
         inputs = inputs.to(device)
         labels = labels.to(device)
         inputs = inputs.to(memory_format=torch.contiguous_format)
@@ -245,7 +258,7 @@ def test(data, model, criterion, optimizer, epoch, test_running_loss):
     print("******** TESTING ********")
     running_corrects = 0
 
-    for inputs, labels in data:
+    for inputs, labels, img_name in data:
         inputs = inputs.to(device)
         labels = labels.to(device)
         inputs = inputs.to(memory_format=torch.contiguous_format)
@@ -317,12 +330,14 @@ if __name__ == '__main__':
 
     parser.add_argument('--dataset', default='cleft_lip_data_600_800', type=str,
                         help='[childadult_train/cleft_lip_data_600_800]')
-    parser.add_argument('--exp', default='cleftLip', type=str,
+    parser.add_argument('--exp', default='cleftLip_mild_severe', type=str,
                         help='Directory to store results[childAdult/ cleftLip/ cleftLipFT]')
+    parser.add_argument('--exp_type', default='adam_baseline', type=str,
+                        help='what hyperparameters to choose etc. ')
 
     parser.add_argument('--archi', type=str, default='MaxxViT_tiny_512', metavar='M',
                         help='CNN Architectunre[vgg16, alexnet, resnet18, MaxxViT_tiny_512, mobilenet_v3_large, efficientnet_v2_large]')
-    parser.add_argument('--num_class', type=int, default=3, metavar='M',
+    parser.add_argument('--num_class', type=int, default=2, metavar='M',
                         help='num of classes in dataset')
 
     parser.add_argument('--finetune', action='store_true', default=False,
@@ -342,7 +357,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--lr', type=float, default=0.00001, metavar='LR',
                         help='learning rate (default: 0.0001)')
-    parser.add_argument('--momentum', type=str, default=0.9, metavar='M',
+    parser.add_argument('--momentum', type=float, default=0.9, metavar='M',
                         help='Momentum')
 
     parser.add_argument('--epochs', type=int, default=15, metavar='N',
@@ -362,11 +377,11 @@ if __name__ == '__main__':
     global args, device
     args = parser.parse_args()
     kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
-
+    os.environ["CUDA_VISIBLE_DEVICES"] = str(args.cuda_id)
     args.cuda = args.cuda and torch.cuda.is_available()
     if args.cuda:
         device = 'cuda'
-        torch.cuda.set_device(args.cuda_id)
+        #torch.cuda.set_device(args.cuda_id)
     else:
         device = 'cpu'
     main()

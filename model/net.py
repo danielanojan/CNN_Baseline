@@ -32,7 +32,7 @@ class NeuralNet(nn.Module):
         #out = self.avgpool(out)
         #out = self.classifier(out)
 
-def get_model(args, device):
+def get_model(args, device, ckp_path):
     # Model
     embeddingNet = None
     if (args.archi == 'resnet18'):
@@ -41,7 +41,7 @@ def get_model(args, device):
         model.fc = nn.Linear(num_ftrs, args.num_class)
         if args.finetune:
             for (name, module) in model.named_children():
-                if name == 'conv1' or 'bn1'  or 'maxpool' or 'layer1' or 'layer2' or 'layer3' or 'layer4' or 'avgpool' :
+                if name == 'conv1' or 'layer1' or 'layer2' or 'layer3' or 'layer4' :
                     for layer in module.children():
                         for param in layer.parameters():
                             if param.requires_grad:
@@ -52,7 +52,7 @@ def get_model(args, device):
         model.classifier[6] = nn.Linear(1024, args.num_class)
         if args.finetune:
             for (name, module) in model.named_children():
-                if name == 'features' or 'avgpool':
+                if name == 'features':
                     for layer in module.children():
                         for param in layer.parameters():
                             if param.requires_grad:
@@ -63,7 +63,7 @@ def get_model(args, device):
         model.classifier[6] = nn.Linear(model.classifier[6].in_features, args.num_class)
         if args.finetune:
             for (name, module) in model.named_children():
-                if name == 'features' or 'avgpool':
+                if name == 'features' :
                     for layer in module.children():
                         for param in layer.parameters():
                             if param.requires_grad:
@@ -85,7 +85,7 @@ def get_model(args, device):
         model.classifier[3] = nn.Linear(in_features=model.classifier[3].in_features, out_features=args.num_class, bias=True)
         if args.finetune:
             for (name, module) in model.named_children():
-                if name == 'features' or 'avgpool':
+                if name == 'features' :
                     for layer in module.children():
                         for param in layer.parameters():
                             if param.requires_grad:
@@ -120,15 +120,15 @@ def get_model(args, device):
 
     # Load weights if provided
     if args.ckp:
-        if os.path.isfile(args.ckp):
-            print("=> Loading checkpoint '{}'".format(args.ckp))
-            checkpoint = torch.load(args.ckp)
+        if os.path.isfile(ckp_path):
+            print("=> Loading checkpoint '{}'".format(ckp_path))
+            checkpoint = torch.load(ckp_path, map_location=device)
             model.load_state_dict(checkpoint['state_dict'])
-            print("=> Loaded checkpoint '{}'".format(args.ckp))
+            #model.load_state_dict(checkpoint)
+            print("=> Loaded checkpoint '{}'".format(ckp_path))
         else:
-            print("=> No checkpoint found at '{}'".format(args.ckp))
+            print("=> No checkpoint found at '{}'".format(ckp_path))
 
     return model
-
 
 

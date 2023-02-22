@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="daniel@cipher.ucd.ie:22 password (6)" filePermissions="420" folderPermissions="493" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false" autoUploadExternalChanges="true">
+  <component name="PublishConfigData" autoUpload="Always" serverName="daniel@cipher.ucd.ie:22 password (7)" filePermissions="420" folderPermissions="493" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false" autoUploadExternalChanges="true">
     <option name="confirmBeforeUploading" value="false" />
     <serverData>
       <paths name="daniel@193.1.133.69:22 agent (10)">
@@ -14,6 +14,13 @@
         <serverdata>
           <mappings>
             <mapping deploy="/home/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="daniel@193.1.133.69:22 agent (12)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/mnt/recsys/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
@@ -102,6 +109,13 @@
         </serverdata>
       </paths>
       <paths name="daniel@cipher.ucd.ie:22 password (6)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/mnt/recsys/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="daniel@cipher.ucd.ie:22 password (7)">
         <serverdata>
           <mappings>
             <mapping deploy="/mnt/recsys/daniel/simase_network/CNN_baseline" local="$PROJECT_DIR$" />
